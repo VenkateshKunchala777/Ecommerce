@@ -2,8 +2,10 @@ package com.Kunchala.Ecommerce.Service;
 
 import com.Kunchala.Ecommerce.Dto.AddressDto;
 import com.Kunchala.Ecommerce.Entity.Address;
+import com.Kunchala.Ecommerce.Entity.Customer;
 import com.Kunchala.Ecommerce.Exception.ResourceNotFoundException;
 import com.Kunchala.Ecommerce.Repository.AddressRepository;
+import com.Kunchala.Ecommerce.Repository.CustomerRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
@@ -15,14 +17,20 @@ public class AddressService {
 
     private final AddressRepository addressRepository;
     private final ModelMapper modelMapper;
+    private final CustomerRepository customerRepository;
 
-    public AddressService(AddressRepository addressRepository, ModelMapper modelMapper) {
+    public AddressService(AddressRepository addressRepository, ModelMapper modelMapper,CustomerRepository customerRepository) {
         this.addressRepository = addressRepository;
         this.modelMapper = modelMapper;
+        this.customerRepository=customerRepository;
     }
 
-    public AddressDto createAddress(AddressDto addressDto) {
+    public AddressDto createAddress(AddressDto addressDto,Long customer_id) {
         Address address = modelMapper.map(addressDto, Address.class);
+        boolean isCustomerExisted=customerRepository.existsById(customer_id);
+        if(!isCustomerExisted) throw new ResourceNotFoundException("Customer is not found with the id "+customer_id+" to attach to address");
+        Customer customer=customerRepository.findById(customer_id).get();
+        address.setCustomer(customer);
         Address savedAddress = addressRepository.save(address);
         return modelMapper.map(savedAddress, AddressDto.class);
     }

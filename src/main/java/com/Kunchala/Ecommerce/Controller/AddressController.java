@@ -19,9 +19,9 @@ public class AddressController {
         this.addressService = addressService;
     }
 
-    @PostMapping
-    public ResponseEntity<AddressDto> createAddress(@RequestBody @Validated AddressDto addressDto) {
-        AddressDto createdAddress = addressService.createAddress(addressDto);
+    @PostMapping("/createAddress/{customer_id}")
+    public ResponseEntity<AddressDto> createAddress(@RequestBody @Validated AddressDto addressDto, @PathVariable  Long customer_id) {
+        AddressDto createdAddress = addressService.createAddress(addressDto,customer_id);
         return new ResponseEntity<>(createdAddress, HttpStatus.CREATED);
     }
 

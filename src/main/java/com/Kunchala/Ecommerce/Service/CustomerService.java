@@ -1,6 +1,7 @@
 package com.Kunchala.Ecommerce.Service;
 
 import com.Kunchala.Ecommerce.Dto.CustomerDto;
+import com.Kunchala.Ecommerce.Entity.Address;
 import com.Kunchala.Ecommerce.Entity.Customer;
 import com.Kunchala.Ecommerce.Exception.ResourceNotFoundException;
 import com.Kunchala.Ecommerce.Repository.CustomerRepository;
@@ -23,6 +24,12 @@ public class CustomerService {
 
     public CustomerDto createCustomer(CustomerDto customerDto) {
         Customer customer = modelMapper.map(customerDto, Customer.class);
+        List<Address> addressList=customer.getAddressList();
+        if(addressList!=null) {
+            for(Address address:addressList) {
+                address.setCustomer(customer);
+            }
+        }
         Customer savedCustomer = customerRepository.save(customer);
         return modelMapper.map(savedCustomer, CustomerDto.class);
     }
