@@ -3,8 +3,10 @@ package com.Kunchala.Ecommerce.Service;
 import com.Kunchala.Ecommerce.Dto.CustomerDto;
 import com.Kunchala.Ecommerce.Entity.Address;
 import com.Kunchala.Ecommerce.Entity.Customer;
+import com.Kunchala.Ecommerce.Entity.Order;
 import com.Kunchala.Ecommerce.Exception.ResourceNotFoundException;
 import com.Kunchala.Ecommerce.Repository.CustomerRepository;
+import com.Kunchala.Ecommerce.Repository.OrderRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +18,6 @@ public class CustomerService {
 
     private final CustomerRepository customerRepository;
     private final ModelMapper modelMapper;
-
     public CustomerService(CustomerRepository customerRepository, ModelMapper modelMapper) {
         this.customerRepository = customerRepository;
         this.modelMapper = modelMapper;
@@ -28,6 +29,12 @@ public class CustomerService {
         if(addressList!=null) {
             for(Address address:addressList) {
                 address.setCustomer(customer);
+            }
+        }
+        List<Order> orders=customer.getOrderList();
+        if(orders!=null) {
+            for(Order order:orders) {
+                order.setCustomer(customer);
             }
         }
         Customer savedCustomer = customerRepository.save(customer);

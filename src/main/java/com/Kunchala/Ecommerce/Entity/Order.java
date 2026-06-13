@@ -1,10 +1,7 @@
 package com.Kunchala.Ecommerce.Entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -25,4 +22,8 @@ public class Order {
     private LocalDate orderDate;
     private String status;
     private Double totalAmount;
+    @ManyToOne
+    @JoinColumn(name = "customer_id",nullable = false)
+    @JsonIgnore
+    private Customer customer;
 }
