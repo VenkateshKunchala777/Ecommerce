@@ -2,6 +2,7 @@ package com.Kunchala.Ecommerce.Service;
 
 import com.Kunchala.Ecommerce.Dto.CategoryDto;
 import com.Kunchala.Ecommerce.Entity.Category;
+import com.Kunchala.Ecommerce.Entity.Product;
 import com.Kunchala.Ecommerce.Exception.ResourceNotFoundException;
 import com.Kunchala.Ecommerce.Repository.CategoryRepository;
 import org.modelmapper.ModelMapper;
@@ -23,6 +24,12 @@ public class CategoryService {
 
     public CategoryDto createCategory(CategoryDto categoryDto) {
         Category category = modelMapper.map(categoryDto, Category.class);
+        List<Product> productList=category.getProducts();
+        if(productList!=null) {
+            for(Product product:productList) {
+                product.setCategory(category);
+            }
+        }
         Category savedCategory = categoryRepository.save(category);
         return modelMapper.map(savedCategory, CategoryDto.class);
     }

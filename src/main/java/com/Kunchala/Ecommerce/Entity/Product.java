@@ -1,9 +1,7 @@
 package com.Kunchala.Ecommerce.Entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,4 +20,8 @@ public class Product {
     private String description;
     private Double price;
     private Integer stock;
+    @ManyToOne
+    @JoinColumn(name = "category_id",nullable = false)
+    @JsonIgnore
+    private Category category;
 }
