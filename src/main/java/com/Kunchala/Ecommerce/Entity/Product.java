@@ -24,4 +24,8 @@ public class Product {
     @JoinColumn(name = "category_id",nullable = false)
     @JsonIgnore
     private Category category;
+    @ManyToOne
+    @JoinColumn(name = "brand_id",nullable = false)
+    @JsonIgnore
+    private Brand brand;
 }

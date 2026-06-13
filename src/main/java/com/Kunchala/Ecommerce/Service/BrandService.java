@@ -2,6 +2,7 @@ package com.Kunchala.Ecommerce.Service;
 
 import com.Kunchala.Ecommerce.Dto.BrandDto;
 import com.Kunchala.Ecommerce.Entity.Brand;
+import com.Kunchala.Ecommerce.Entity.Product;
 import com.Kunchala.Ecommerce.Exception.ResourceNotFoundException;
 import com.Kunchala.Ecommerce.Repository.BrandRepository;
 import org.modelmapper.ModelMapper;
@@ -23,6 +24,12 @@ public class BrandService {
 
     public BrandDto createBrand(BrandDto brandDto) {
         Brand brand = modelMapper.map(brandDto, Brand.class);
+       List<Product> productList=brand.getProductList();
+       if(productList!=null) {
+           for(Product product: productList) {
+               product.setBrand(brand);
+           }
+       }
         Brand savedBrand = brandRepository.save(brand);
         return modelMapper.map(savedBrand, BrandDto.class);
     }
