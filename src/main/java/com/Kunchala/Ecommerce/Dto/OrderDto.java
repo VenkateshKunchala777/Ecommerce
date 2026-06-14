@@ -9,6 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -20,6 +21,6 @@ public class OrderDto {
     private LocalDate orderDate;
     @NotBlank(message = "Status is mandatory")
     private String status;
-    @Positive(message = "Total amount must be positive")
     private Double totalAmount;
+    private List<OrderItemDto> orderItems;
 }

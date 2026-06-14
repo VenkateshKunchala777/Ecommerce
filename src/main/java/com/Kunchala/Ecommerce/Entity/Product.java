@@ -7,6 +7,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Entity
 @Data
 @NoArgsConstructor
@@ -28,4 +30,7 @@ public class Product {
     @JoinColumn(name = "brand_id",nullable = false)
     @JsonIgnore
     private Brand brand;
+    @OneToMany(mappedBy = "product")
+    @JsonIgnore
+    private List<OrderItem> orderItems;
 }
