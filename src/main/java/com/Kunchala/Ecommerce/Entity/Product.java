@@ -22,6 +22,8 @@ public class Product {
     private String description;
     private Double price;
     private Integer stock;
+    @Version
+    private Integer version;
     @ManyToOne
     @JoinColumn(name = "category_id",nullable = false)
     @JsonIgnore
