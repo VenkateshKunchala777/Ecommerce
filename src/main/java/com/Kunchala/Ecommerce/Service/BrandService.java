@@ -57,6 +57,17 @@ public class BrandService {
         return modelMapper.map(updatedBrand, BrandDto.class);
     }
 
+    public BrandDto patchBrand(Long id, BrandDto brandDto) {
+        Brand existingBrand = brandRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Brand not found with id: " + id));
+
+        if (brandDto.getName() != null) existingBrand.setName(brandDto.getName());
+        if (brandDto.getDescription() != null) existingBrand.setDescription(brandDto.getDescription());
+
+        Brand updatedBrand = brandRepository.save(existingBrand);
+        return modelMapper.map(updatedBrand, BrandDto.class);
+    }
+
     public void deleteBrand(Long id) {
         if (!brandRepository.existsById(id)) {
             throw new ResourceNotFoundException("Brand not found with id: " + id);

@@ -64,6 +64,19 @@ public class CustomerService {
         return modelMapper.map(updatedCustomer, CustomerDto.class);
     }
 
+    public CustomerDto patchCustomer(Long id, CustomerDto customerDto) {
+        Customer existingCustomer = customerRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Customer not found with id: " + id));
+
+        if (customerDto.getFirstName() != null) existingCustomer.setFirstName(customerDto.getFirstName());
+        if (customerDto.getLastName() != null) existingCustomer.setLastName(customerDto.getLastName());
+        if (customerDto.getEmail() != null) existingCustomer.setEmail(customerDto.getEmail());
+        if (customerDto.getPhone() != null) existingCustomer.setPhone(customerDto.getPhone());
+
+        Customer updatedCustomer = customerRepository.save(existingCustomer);
+        return modelMapper.map(updatedCustomer, CustomerDto.class);
+    }
+
     public void deleteCustomer(Long id) {
         if (!customerRepository.existsById(id)) {
             throw new ResourceNotFoundException("Customer not found with id: " + id);

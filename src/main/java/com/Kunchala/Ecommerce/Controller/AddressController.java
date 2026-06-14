@@ -43,6 +43,12 @@ public class AddressController {
         return ResponseEntity.ok(updatedAddress);
     }
 
+    @PatchMapping("/{id}")
+    public ResponseEntity<AddressDto> patchAddress(@PathVariable Long id, @RequestBody AddressDto addressDto) {
+        AddressDto patchedAddress = addressService.patchAddress(id, addressDto);
+        return ResponseEntity.ok(patchedAddress);
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteAddress(@PathVariable Long id) {
         addressService.deleteAddress(id);

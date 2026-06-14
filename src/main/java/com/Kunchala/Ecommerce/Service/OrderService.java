@@ -123,6 +123,17 @@ public class OrderService {
         return modelMapper.map(updatedOrder, OrderDto.class);
     }
 
+    public OrderDto patchOrder(Long id, OrderDto orderDto) {
+        Order existingOrder = orderRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Order not found with id: " + id));
+
+        if (orderDto.getStatus() != null) existingOrder.setStatus(orderDto.getStatus());
+        if (orderDto.getOrderDate() != null) existingOrder.setOrderDate(orderDto.getOrderDate());
+
+        Order updatedOrder = orderRepository.save(existingOrder);
+        return mapToDto(updatedOrder);
+    }
+
     public void deleteOrder(Long id) {
         if (!orderRepository.existsById(id)) {
             throw new ResourceNotFoundException("Order not found with id: " + id);

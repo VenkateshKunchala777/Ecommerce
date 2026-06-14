@@ -57,6 +57,17 @@ public class CategoryService {
         return modelMapper.map(updatedCategory, CategoryDto.class);
     }
 
+    public CategoryDto patchCategory(Long id, CategoryDto categoryDto) {
+        Category existingCategory = categoryRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Category not found with id: " + id));
+
+        if (categoryDto.getName() != null) existingCategory.setName(categoryDto.getName());
+        if (categoryDto.getDescription() != null) existingCategory.setDescription(categoryDto.getDescription());
+
+        Category updatedCategory = categoryRepository.save(existingCategory);
+        return modelMapper.map(updatedCategory, CategoryDto.class);
+    }
+
     public void deleteCategory(Long id) {
         if (!categoryRepository.existsById(id)) {
             throw new ResourceNotFoundException("Category not found with id: " + id);

@@ -58,6 +58,20 @@ public class AddressService {
         return modelMapper.map(updatedAddress, AddressDto.class);
     }
 
+    public AddressDto patchAddress(Long id, AddressDto addressDto) {
+        Address existingAddress = addressRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Address not found with id: " + id));
+
+        if (addressDto.getHouseNo() != null) existingAddress.setHouseNo(addressDto.getHouseNo());
+        if (addressDto.getStreet() != null) existingAddress.setStreet(addressDto.getStreet());
+        if (addressDto.getCity() != null) existingAddress.setCity(addressDto.getCity());
+        if (addressDto.getState() != null) existingAddress.setState(addressDto.getState());
+        if (addressDto.getPincode() != null) existingAddress.setPincode(addressDto.getPincode());
+
+        Address updatedAddress = addressRepository.save(existingAddress);
+        return modelMapper.map(updatedAddress, AddressDto.class);
+    }
+
     public void deleteAddress(Long id) {
         if (!addressRepository.existsById(id)) {
             throw new ResourceNotFoundException("Address not found with id: " + id);

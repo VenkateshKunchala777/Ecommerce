@@ -43,6 +43,12 @@ public class BrandController {
         return ResponseEntity.ok(updatedBrand);
     }
 
+    @PatchMapping("/{id}")
+    public ResponseEntity<BrandDto> patchBrand(@PathVariable Long id, @RequestBody BrandDto brandDto) {
+        BrandDto patchedBrand = brandService.patchBrand(id, brandDto);
+        return ResponseEntity.ok(patchedBrand);
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteBrand(@PathVariable Long id) {
         brandService.deleteBrand(id);

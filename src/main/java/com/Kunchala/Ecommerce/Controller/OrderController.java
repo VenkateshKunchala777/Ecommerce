@@ -43,6 +43,12 @@ public class OrderController {
         return ResponseEntity.ok(updatedOrder);
     }
 
+    @PatchMapping("/{id}")
+    public ResponseEntity<OrderDto> patchOrder(@PathVariable Long id, @RequestBody OrderDto orderDto) {
+        OrderDto patchedOrder = orderService.patchOrder(id, orderDto);
+        return ResponseEntity.ok(patchedOrder);
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteOrder(@PathVariable Long id) {
         orderService.deleteOrder(id);

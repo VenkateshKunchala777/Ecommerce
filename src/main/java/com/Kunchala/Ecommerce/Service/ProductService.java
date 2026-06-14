@@ -67,6 +67,19 @@ public class ProductService {
         return modelMapper.map(updatedProduct, ProductDto.class);
     }
 
+    public ProductDto patchProduct(Long id, ProductDto productDto) {
+        Product existingProduct = productRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Product not found with id: " + id));
+
+        if (productDto.getName() != null) existingProduct.setName(productDto.getName());
+        if (productDto.getDescription() != null) existingProduct.setDescription(productDto.getDescription());
+        if (productDto.getPrice() != null) existingProduct.setPrice(productDto.getPrice());
+        if (productDto.getStock() != null) existingProduct.setStock(productDto.getStock());
+
+        Product updatedProduct = productRepository.save(existingProduct);
+        return modelMapper.map(updatedProduct, ProductDto.class);
+    }
+
     public void deleteProduct(Long id) {
         if (!productRepository.existsById(id)) {
             throw new ResourceNotFoundException("Product not found with id: " + id);
