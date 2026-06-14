@@ -6,10 +6,12 @@ import com.Kunchala.Ecommerce.Entity.Customer;
 import com.Kunchala.Ecommerce.Entity.Order;
 import com.Kunchala.Ecommerce.Entity.OrderItem;
 import com.Kunchala.Ecommerce.Entity.Product;
+import com.Kunchala.Ecommerce.Exception.InsufficientStockException;
 import com.Kunchala.Ecommerce.Exception.ResourceNotFoundException;
 import com.Kunchala.Ecommerce.Repository.CustomerRepository;
 import com.Kunchala.Ecommerce.Repository.OrderRepository;
 import com.Kunchala.Ecommerce.Repository.ProductRepository;
+import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
@@ -31,7 +33,7 @@ public class OrderService {
         this.customerRepository = customerRepository;
         this.productRepository = productRepository;
     }
-
+    @Transactional
     public OrderDto createOrder(OrderDto orderDto, Long customer_id) {
         Order order = new Order();
         order.setOrderDate(orderDto.getOrderDate());
@@ -49,6 +51,13 @@ public class OrderService {
             for (OrderItemDto itemDto : orderDto.getOrderItems()) {
                 Product product = productRepository.findById(itemDto.getProductId())
                         .orElseThrow(() -> new ResourceNotFoundException("Product not found with id: " + itemDto.getProductId()));
+                Integer availableStock=product.getStock();
+                if(itemDto.getQuantity()<=availableStock) {
+                    product.setStock(availableStock- itemDto.getQuantity());
+                }
+                else {
+                    throw  new InsufficientStockException("customer requested for"+ itemDto.getQuantity() +"unit of "+product.getName()+" but the available stock is "+ product.getStock());
+                }
 
                 OrderItem orderItem = new OrderItem();
                 orderItem.setQuantity(itemDto.getQuantity());
